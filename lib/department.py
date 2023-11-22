@@ -126,6 +126,7 @@ class Department:
         """
 
         row = CURSOR.execute(sql, (id,)).fetchone()
+        print(f"{row} from find_by_id")
         return cls.instance_from_db(row) if row else None
 
     @classmethod
@@ -139,3 +140,15 @@ class Department:
 
         row = CURSOR.execute(sql, (name,)).fetchone()
         return cls.instance_from_db(row) if row else None
+    def employee(self):
+        from employee import Employee
+        
+        sql = """
+            SELECT * FROM Employee
+            WHERE department_id = ?
+        """
+        CURSOR.EXECUTE(sql, (self.id,),)
+        rows = CURSOR.fetchall()
+        return [
+            Employee.instance_from_db(row) for row in rows
+        ]
